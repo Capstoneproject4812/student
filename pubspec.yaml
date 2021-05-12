@@ -41,6 +41,8 @@ dependencies:
   introduction_screen: ^2.1.0
   auth: ^7.4.0
   image_picker: ^0.7.5
+  font_awesome_flutter: ^9.0.0
+  firebase_storage: ^8.0.6
 
 
   # The following adds the Cupertino Icons font to your application.

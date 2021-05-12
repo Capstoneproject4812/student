@@ -1,5 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:ipvp/pages/EditP.dart';
+import 'package:ipvp/pages/EditProfile.dart';
 import 'package:ipvp/DashBoard/HomePage.dart';
 import 'package:ipvp/pages/MyAccount.dart';
 import 'package:ipvp/pages/Settings.dart';
@@ -8,7 +8,7 @@ import 'package:ipvp/pages/Settings.dart';
 enum NavigationEvents {
   HomePageClickedEvent,
   MyAccountClickedEvent,
-  EditProfileClickedEvent,
+  EditProfilePageClickedEvent,
   SettingsClickedEvent,
 }
 
@@ -26,8 +26,8 @@ class NavigationBloc extends Bloc<NavigationEvents, NavigationStates> {
       case NavigationEvents.MyAccountClickedEvent:
         yield MyAccount();
         break;
-      case NavigationEvents.EditProfileClickedEvent:
-        yield EditP();
+      case NavigationEvents.EditProfilePageClickedEvent:
+        yield EditProfilePage();
         break;
       case NavigationEvents.SettingsClickedEvent:
         yield SPage();

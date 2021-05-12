@@ -106,7 +106,7 @@ class _SideBarState extends State<SideBar> with SingleTickerProviderStateMixin<S
                         title: "My Accounts",
                         onTap: () {
                           onIconPressed();
-                          BlocProvider.of<NavigationBloc>(context).add(NavigationEvents.EditProfileClickedEvent);
+                          BlocProvider.of<NavigationBloc>(context).add(NavigationEvents.EditProfilePageClickedEvent);
                         },
                       ),
                       MenuItem(
@@ -114,7 +114,7 @@ class _SideBarState extends State<SideBar> with SingleTickerProviderStateMixin<S
                         title: "Edit Profile",
                         onTap: () {
                           onIconPressed();
-                          BlocProvider.of<NavigationBloc>(context).add(NavigationEvents.EditProfileClickedEvent);
+                          BlocProvider.of<NavigationBloc>(context).add(NavigationEvents.EditProfilePageClickedEvent);
                         },
                       ),
                       MenuItem(
