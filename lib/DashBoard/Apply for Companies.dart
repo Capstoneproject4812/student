@@ -1,10 +1,9 @@
-
-import 'package:firebase_database/firebase_database.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ipvp/SideBarWork/AB.dart';
-
+import 'package:firebase_database/firebase_database.dart' as db;
 
 class ApplyC extends StatefulWidget {
   @override
@@ -12,20 +11,34 @@ class ApplyC extends StatefulWidget {
 }
 
 class _ApplyCState extends State<ApplyC> {
-  Query _ref;
-  String status ='' ;
+  final AuthService _auth = AuthService();
+  db.Query _ref;
+  String status = '';
   String name = '';
   String type = '';
   String details = '';
 
-  DatabaseReference reference = FirebaseDatabase.instance.reference().child(
-      'Companies');
+  db.DatabaseReference reference =
+  db.FirebaseDatabase.instance.reference().child('Companies');
+
+  addApplication(data) {
+    CollectionReference collectionReference =
+    Firestore.instance.collection('apply-companies');
+    // this line push data to that firebase collection/table
+    collectionReference.add(data);
+    // if (result == null) {
+    //   setState(() {
+    //     error = 'Something went wrong !! Retry';
+    //   });
+    // }
+  }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    _ref = FirebaseDatabase.instance.reference()
+    _ref = db.FirebaseDatabase.instance
+        .reference()
         .child('Companies')
         .orderByChild('name');
   }
@@ -43,62 +56,78 @@ class _ApplyCState extends State<ApplyC> {
           children: [
             Padding(
               padding: const EdgeInsets.only(top: 20),
-              child: Row(children: [
-                Icon(Icons.apartment,
-                  color: Colors.black,
-                  size: 15,),
-                SizedBox(width: 10,),
-                Text(company['name'],
-                  style: TextStyle(
-                    fontFamily: 'Nunito Regular',
-                    fontSize: 27,
-                    fontWeight: FontWeight.w600,
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.apartment,
                     color: Colors.black,
+                    size: 15,
                   ),
-                ),
-              ],
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    company['name'],
+                    style: TextStyle(
+                      fontFamily: 'Nunito Regular',
+                      fontSize: 27,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black,
+                    ),
+                  ),
+                ],
               ),
             ),
-
             Padding(
               padding: const EdgeInsets.only(bottom: 5, top: 10),
-              child: Row(children: [
-                Icon(Icons.book_online_outlined,
-                  color: Colors.black,
-                  size: 15,),
-                SizedBox(width: 10),
-                Text(company['type'],
-                  style: TextStyle(
-                    fontFamily: 'Nunito Regular',
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600,
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.book_online_outlined,
                     color: Colors.black,
+                    size: 15,
                   ),
-                ),
-              ],
+                  SizedBox(width: 10),
+                  Text(
+                    company['type'],
+                    style: TextStyle(
+                      fontFamily: 'Nunito Regular',
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black,
+                    ),
+                  ),
+                ],
               ),
             ),
-
             Padding(
               padding: const EdgeInsets.only(top: 10),
-              child: Row(children: [
-                Icon(Icons.receipt,
-                  color: Colors.black,
-                  size: 15,),
-                SizedBox(width: 10,),
-                Text(company['details'],
-                  maxLines: 5,
-                  style: TextStyle(
-                    fontFamily: 'Nunito Regular',
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600,
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.receipt,
                     color: Colors.black,
+                    size: 15,
                   ),
-                ),
-              ],
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    company['details'],
+                    maxLines: 5,
+                    style: TextStyle(
+                      fontFamily: 'Nunito Regular',
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black,
+                    ),
+                  ),
+                ],
               ),
             ),
-            SizedBox(height: 20,),
+            SizedBox(
+              height: 20,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -106,22 +135,30 @@ class _ApplyCState extends State<ApplyC> {
                   onTap: () {
                     _showDeleteDialog(company: company);
                   },
-                  child: Row(children: [
-                    Icon(Icons.subdirectory_arrow_right_rounded,
-                      color: Colors.green[300],
-                    ),
-                    Text('Apply',
-                      style: TextStyle(
-                        fontFamily: 'Nunito Regular',
-                        fontSize: 20,
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.subdirectory_arrow_right_rounded,
                         color: Colors.green[300],
-                        fontWeight: FontWeight.w600,
                       ),
-                    ),
-                    SizedBox(height: 6,),
-                  ],),
+                      Text(
+                        'Apply',
+                        style: TextStyle(
+                          fontFamily: 'Nunito Regular',
+                          fontSize: 20,
+                          color: Colors.green[300],
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 6,
+                      ),
+                    ],
+                  ),
                 ),
-                SizedBox(width: 20,),
+                SizedBox(
+                  width: 20,
+                ),
               ],
             ),
           ],
@@ -130,56 +167,58 @@ class _ApplyCState extends State<ApplyC> {
     );
   }
 
-
   _showDeleteDialog({Map company}) {
-    showDialog(context: context, builder: (context) {
-      return AlertDialog(title: Text('Apply for ${company['name']}'),
-        content: Text('Are you sure you want to Apply?',
-          style: TextStyle(
-              fontFamily: 'Nunito Regular',
-              fontSize: 19,
-              color: Colors.black
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () async {
-              Map<String, dynamic> data = {
-              student:_auth.name,
-              user:_auth.user,
-              'name':name,
-              'type':type,
-              'details':details,
-              status:"applied",
-                };
-              add.
-              //Navigator.pop(context);
-            },
-            child: Text('Yes',
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Apply for ${company['name']}'),
+            content: Text(
+              'Are you sure you want to Apply?',
               style: TextStyle(
                   fontFamily: 'Nunito Regular',
-                  fontSize: 18,
-                  color: Colors.black
-              ),
+                  fontSize: 19,
+                  color: Colors.black),
             ),
-          ),
-          TextButton(
-            onPressed: () {
-              reference
-                  .child(company['key'])
-                  .remove()
-                  .whenComplete(() => Navigator.pop(context));
-            },
-            child: Text('No',
-              style: TextStyle(
-                  fontFamily: 'Nunito Regular',
-                  fontSize: 18,
-                  color: Colors.black
+            actions: [
+              TextButton(
+                onPressed: () async {
+                  Map<String, dynamic> data = {
+                    "user": _auth.user,
+                    "name": name,
+                    "type": type,
+                    "details": details,
+                    "status": "applied",
+                  };
+                  addApplication(data);
+                  //Navigator.pop(context);
+                },
+                child: Text(
+                  'Yes',
+                  style: TextStyle(
+                      fontFamily: 'Nunito Regular',
+                      fontSize: 18,
+                      color: Colors.black),
+                ),
               ),
-            ),)
-        ],
-      );
-    });
+              TextButton(
+                onPressed: () {
+                  reference
+                      .child(company['key'])
+                      .remove()
+                      .whenComplete(() => Navigator.pop(context));
+                },
+                child: Text(
+                  'No',
+                  style: TextStyle(
+                      fontFamily: 'Nunito Regular',
+                      fontSize: 18,
+                      color: Colors.black),
+                ),
+              )
+            ],
+          );
+        });
   }
 
   @override
@@ -196,7 +235,8 @@ class _ApplyCState extends State<ApplyC> {
                 children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.only(left: 28),
-                    child: Text('IPVP',
+                    child: Text(
+                      'IPVP',
                       style: TextStyle(
                         fontFamily: 'Raleway Regular',
                         color: Colors.white,
@@ -208,7 +248,8 @@ class _ApplyCState extends State<ApplyC> {
                   Padding(
                     padding: const EdgeInsets.only(left: 10),
                     child: IconButton(
-                      icon: Icon(Icons.search,
+                      icon: Icon(
+                        Icons.search,
                         color: Colors.white,
                       ),
                       iconSize: 35,
@@ -226,12 +267,13 @@ class _ApplyCState extends State<ApplyC> {
         height: double.infinity,
         child: FirebaseAnimatedList(
           query: _ref,
-          itemBuilder: (BuildContext context, DataSnapshot snapshot,
-              Animation<double>animation, int index) {
+          itemBuilder: (BuildContext context, db.DataSnapshot snapshot,
+              Animation<double> animation, int index) {
             Map company = snapshot.value;
             company['key'] = snapshot.key;
             return _buildCompItem(company: company);
-          },),
+          },
+        ),
       ),
       backgroundColor: Colors.transparent,
     );
